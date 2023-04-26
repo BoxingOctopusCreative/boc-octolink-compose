@@ -1,0 +1,61 @@
+version: "3.7"
+
+services:
+  kutt:
+    image: kutt/kutt:latest
+    command: ["npm", "start"]
+    ports:
+      - "127.0.0.1:3001:3001"    
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.kutt.rule=Host(`octolink.to`)
+      - traefik.http.routers.kutt.tls=true
+      - traefik.http.routers.kutt.entrypoints=websecure
+      - traefik.http.routers.kutt.service=kutt
+      - traefik.http.routers.kutt.tls.certresolver=leresolver
+      - traefik.http.services.kutt.loadbalancer.server.port=3001
+      - traefik.http.middlewares.kutt.headers.SSLRedirect=true
+      - traefik.http.middlewares.kutt.headers.STSSeconds=315360000
+      - traefik.http.middlewares.kutt.headers.browserXSSFilter=true
+      - traefik.http.middlewares.kutt.headers.contentTypeNosniff=true
+      - traefik.http.middlewares.kutt.headers.forceSTSHeader=true
+      - traefik.http.middlewares.kutt.headers.SSLHost=octolink.to
+      - traefik.http.middlewares.kutt.headers.STSIncludeSubdomains=true
+      - traefik.http.middlewares.kutt.headers.STSPreload=true
+    environment:
+      PORT: 3001
+      SITE_NAME: Octolink
+      DEFAULT_DOMAIN: octolink.to
+      LINK_LENGTH: 6
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_SSL: ${DB_SSL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_DB: ${REDIS_DB}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      DISALLOW_REGISTRATION: false
+      DISALLOW_ANONYMOUS_LINKS: false
+      USER_LIMIT_PER_DAY: 50
+      NON_USER_COOLDOWN: 0
+      DEFAULT_MAX_STATS_PER_LINK: 5000
+      CUSTOM_DOMAIN_USE_HTTPS: false
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_EMAILS: ${ADMIN_EMAILS}
+      RECAPTCHA_SITE_KEY: ${RECAPTCHA_SITE_KEY}
+      RECAPTCHA_SECRET_KEY: ${RECAPTCHA_SECRET_KEY}
+      GOOGLE_SAFE_BROWSING_KEY: ${GOOGLE_SAFE_BROWSING_KEY}
+      GOOGLE_ANALYTICS: ${GOOGLE_ANALYTICS}
+      GOOGLE_ANALYTICS_UNIVERSAL: ${GOOGLE_ANALYTICS_UNIVERSAL}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_SECURE: true
+      MAIL_USER: ${MAIL_USER}
+      MAIL_FROM: ${MAIL_FROM}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      REPORT_EMAIL: ${REPORT_EMAIL}
+      CONTACT_EMAIL: ${CONTACT_EMAIL}
