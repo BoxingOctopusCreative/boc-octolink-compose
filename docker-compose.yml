@@ -1,11 +1,18 @@
+---
 version: "3.9"
 
 services:
   kutt:
     image: kutt/kutt:latest
     command: ["npm", "start"]
+    restart: always
+    networks:
+      default:
+        ipv4_address: 172.19.0.12
+      data_stack:
+        ipv4_address: 10.5.0.101
     ports:
-      - "127.0.0.1:3001:3001"    
+      - "127.0.0.1:3001:3001"
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
@@ -64,3 +71,6 @@ networks:
   default:
     external: true
     name: portainer_default
+  data_stack:
+    external: true
+    name: data_stack
